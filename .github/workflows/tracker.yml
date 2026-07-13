@@ -2,18 +2,22 @@ name: Automated Eastern Maritime Tracker
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs daily at midnight UTC
-  workflow_dispatch: # Allows you to run it manually right now
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+# THIS BLOCK FIXES EXIT CODE 128
+permissions:
+  contents: write 
 
 jobs:
   track-freight:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # UPGRADED TO V4 TO FIX NODE WARNING
 
     - name: Initialize Python Environment
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5 # UPGRADED TO V5 TO FIX NODE WARNING
       with:
         python-version: '3.10'
 
