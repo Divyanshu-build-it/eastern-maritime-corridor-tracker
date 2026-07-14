@@ -5,26 +5,20 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 
-# THIS BLOCK FIXES EXIT CODE 128
 permissions:
-  contents: write 
+  contents: write
 
 jobs:
   track-freight:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository Code
-      uses: actions/checkout@v4 # UPGRADED TO V4 TO FIX NODE WARNING
+      uses: actions/checkout@v4
 
     - name: Initialize Python Environment
-      uses: actions/setup-python@v5 # UPGRADED TO V5 TO FIX NODE WARNING
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-
-    - name: Install Data Architecture Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pandas tabulate
 
     - name: Execute Live Maritime Analysis
       run: python maritime_tracker.py
@@ -34,4 +28,5 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add README.md
-        git diff --quiet && git diff --cached --quiet || (git commit -m "Automated log update: Live EMC positioning data captured" && git push)
+        git commit -m "Automated log update: Live EMC positioning data captured" || exit 0
+        git push
